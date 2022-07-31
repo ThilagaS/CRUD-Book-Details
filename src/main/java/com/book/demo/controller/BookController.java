@@ -49,9 +49,9 @@ public class BookController {
 	}
 	
 	@PutMapping("/updateBook")
-	public ResponseEntity<Book> updateBook(@Valid @RequestBody Book book) {
-		bookService.updateBook(book);
-		return new ResponseEntity<Book>(book, HttpStatus.OK);
+	public ResponseEntity<Book> updateBook(@PathVariable("id") String id) {
+		bookService.updateBook(id);
+		return new ResponseEntity<Book>(HttpStatus.ACCEPTED);
 	}
 	
 }

@@ -10,6 +10,6 @@ public interface BookService {
 		List<Book> getAllBook();		
 		Book findBookById(String id); 
 		Book deleteBookById(String id);	
-		void updateBook(Book book);
+		void updateBook(String id);
 		
 }
