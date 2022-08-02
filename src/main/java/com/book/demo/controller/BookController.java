@@ -26,7 +26,7 @@ public class BookController {
 	@Autowired
 	BookService bookService;
 
-	@PostMapping("/saveBook")
+	@PostMapping("/management/book")
 	public HttpStatus createBook(@Valid @RequestBody Book book) {
 		
 		bookService.saveBook(book);
@@ -34,28 +34,28 @@ public class BookController {
 
 	}
 
-	@GetMapping("/findAll")
+	@GetMapping("/management/book")
 	public List<Book> findAll() {
 		return bookService.getAllBook();
 	}
 
-	@GetMapping("/getBookById/{id}")
+	@GetMapping("/management/book/{id}")
 	public ResponseEntity<Book> getBookById(@PathVariable("id") String id){
 		return new ResponseEntity<Book>(bookService.findBookById(id), HttpStatus.OK);
 	}
 	
-	@GetMapping("/checkOut")
+	@GetMapping("/management/checkOut")
 	public ResponseEntity<CheckOutResponse> checkout(@RequestBody List<BookRequest> bookRequest) {
 		return new ResponseEntity<CheckOutResponse>(bookService.checkOutBook(bookRequest), HttpStatus.OK);
  	}
 	
-	@DeleteMapping("/deleteBook/{id}")
+	@DeleteMapping("/management/book/{id}")
 	public ResponseEntity<Book> deleteBook(@PathVariable("id") String id) {
 		bookService.deleteBookById(id);
 		return new ResponseEntity<Book>(HttpStatus.NO_CONTENT);
 	}
 	
-	@PutMapping("/updateBook")
+	@PutMapping("/management/book")
 	public ResponseEntity<Book> updateBook(@PathVariable("id") String id) {
 		bookService.updateBook(id);
 		return new ResponseEntity<Book>(HttpStatus.ACCEPTED);
