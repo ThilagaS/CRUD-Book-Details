@@ -10,7 +10,6 @@ public class BookRequest {
 	private String description;
 	private String type;
 	private Double price;
-	private Discount discount;
 	public BookRequest() {
 		
 		// TODO Auto-generated constructor stub
@@ -18,8 +17,7 @@ public class BookRequest {
 
 	
 	
-	public BookRequest(String id, String name, String author, String description, String type, Double price,
-			Discount discount) {
+	public BookRequest(String id, String name, String author, String description, String type, Double price) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -27,20 +25,9 @@ public class BookRequest {
 		this.description = description;
 		this.type = type;
 		this.price = price;
-		this.discount = discount;
 	}
 
 
-
-	public Discount getDiscount() {
-		return discount;
-	}
-
-
-
-	public void setDiscount(Discount discount) {
-		this.discount = discount;
-	}
 
 
 

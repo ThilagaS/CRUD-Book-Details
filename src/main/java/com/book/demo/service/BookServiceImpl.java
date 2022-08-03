@@ -1,9 +1,9 @@
 package com.book.demo.service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +14,12 @@ import com.book.demo.BookRepository.BookRepository;
 import com.book.demo.BookRepository.DiscountRepository;
 import com.book.demo.dao.BookDao;
 import com.book.demo.dao.DiscountDao;
-@Service
-public class BookServiceImpl  implements BookService{
 
+import lombok.extern.slf4j.Slf4j;
+@Service
+@Slf4j 
+public class BookServiceImpl  implements BookService{
+	private static final org.slf4j.Logger log = LoggerFactory.getLogger(BookServiceImpl.class);
 	@Autowired
 	BookRepository bookRespository;
 	@Autowired
@@ -28,6 +31,7 @@ public class BookServiceImpl  implements BookService{
 	
 	@Autowired
 	Book book;
+
 	public void saveBook(Book book) {
 		bookDao.setId(book.getId());
 		bookDao.setName(book.getName());
@@ -36,6 +40,7 @@ public class BookServiceImpl  implements BookService{
 		bookDao.setType(book.getType());
 		bookDao.setPrice(book.getPrice());
 		bookRespository.save(bookDao);
+		log.info("Book Saved Successfully");
 	}
 	
 	@Override
@@ -46,19 +51,13 @@ public class BookServiceImpl  implements BookService{
 	
 	
 	@Override
-	public Book findBookById(String bookId) {
+	public BookDao findBookById(String bookId) {
 		BookDao bookDao=bookRespository.findBookById(bookId);
-		book.setId(bookDao.getId());
-		book.setName(bookDao.getName());
-		book.setAuthor(bookDao.getAuthor());
-		book.setDescription(bookDao.getDescription());
-		book.setType(bookDao.getType());
-		book.setPrice(bookDao.getPrice());
-		 book.setAuthor(bookDao.getAuthor());
-		return book;
+	
+		return bookDao;
 	}
 	
-	public Book deleteBookById(String id) {
+	public BookDao deleteBookById(String id) {
 		bookRespository.deleteById(id);
 		 return null;
 	}
@@ -78,14 +77,15 @@ public class BookServiceImpl  implements BookService{
 	@Override
 	public CheckOutResponse checkOutBook(List<BookRequest> books) {
 		CheckOutResponse response=new CheckOutResponse();
-		 Map<String, Double> mapTogetPrice = books.stream().collect(
-	                Collectors.toMap(BookRequest::getType, BookRequest::getPrice));
-		   for (Map.Entry<String, Double> bookDetails : mapTogetPrice.entrySet()) {
-		        System.out.println(bookDetails.getKey() + ":" + bookDetails.getValue());
-		    	DiscountDao discount= discountRepository.getDiscountByType(bookDetails.getKey());
-		    	response.setTotalprice((bookDetails.getValue()*discount.getDiscount())/100);
-		    }
-	
+		double discountprice=0;
+
+		        for(BookRequest bookReq:books) {
+		    	DiscountDao discount= discountRepository.getDiscountByType(bookReq.getType());
+		    	 discountprice=((bookReq.getPrice()*discount.getDiscount())/100);
+		    	response.setTotalprice(bookReq.getPrice()-discountprice);
+		        }
+		    
+		   log.info("checkout response");
 		return response;
 		
 	}
